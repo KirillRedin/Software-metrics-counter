@@ -238,3 +238,5 @@ class EuroDiffusion:
 diffusion_counter = EuroDiffusion()
 diffusion_counter.parse('test3')
 
+if(""'fq#testwwqt\'\"esttqe'""): print('12') #test
+

@@ -1,8 +1,12 @@
+import re
+
+
 class LinesCounter:
     def __init__(self):
         self.empty_lines_amount = 0
         self.physical_lines_amount = 0
         self.logical_lines_amount = 0
+        self.comments_amount = 0
 
 
     def count_lines(self, name):
@@ -16,8 +20,41 @@ class LinesCounter:
             # Check if line is empty
             if not line.strip():
                 self.empty_lines_amount += 1
+            else:
+                self.analyze_line(line)
 
         self.get_physical_lines_amount(lines_amount)
+
+
+    def analyze_line(self, line):
+        line = self.clear_line(line)
+
+        if self.line_is_comment(line):
+            self.comments_amount += 1
+        else:
+            if self.line_has_comment(line):
+                self.comments_amount +=1
+
+        return line
+
+
+    def clear_line(self, line):
+        # Remove metacharacters ' and " escaped with \ so we can correctly recognize phrases in "..." and '...'
+        line = re.sub(r'\\[\'\"]', '', line)
+        # Remove phrases in '...' and "..." to avoid quoted text recognition
+        line = re.sub(r'\'[^\']*\'', '', line)
+        line = re.sub(r'(\"[^\"]*\")', '', line)
+        return line
+
+
+    def line_is_comment(self, line):
+        return line[0]=='#'
+
+
+    def line_has_comment(self, line):
+        result = re.findall(r'#.*', line)
+        print(result)
+        return result
 
 
     def get_physical_lines_amount(self, lines_amount):
@@ -31,6 +68,7 @@ class LinesCounter:
 
     def print_result(self):
         print('Physical lines amount: %d' % (self.physical_lines_amount))
+        print('Comments amount: %d' % (self.comments_amount))
         print('Empty lines amount: %d' % (self.empty_lines_amount))
 
 
