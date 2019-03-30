@@ -66,9 +66,14 @@ class LinesCounter:
             self.physical_lines_amount = lines_amount
 
 
+    def calculate_comment_level(self):
+        return int(self.physical_lines_amount / self.comments_amount)
+
+
     def print_result(self):
         print('Physical lines amount: %d' % (self.physical_lines_amount))
         print('Comments amount: %d' % (self.comments_amount))
+        print('Comment level: %d' % (self.calculate_comment_level()))
         print('Empty lines amount: %d' % (self.empty_lines_amount))
 
 
